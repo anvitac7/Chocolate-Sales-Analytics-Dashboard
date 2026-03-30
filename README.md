@@ -192,7 +192,6 @@ app.py              ← renders everything with st.plotly_chart / st.markdown
 
 ## 🔮 Future Improvements
 
-- [ ] **Forecasting** — Prophet / ARIMA next-quarter revenue projections
 - [ ] **Streamlit Cloud deployment** — add `secrets.toml` for cloud dataset loading
 - [ ] **Google Sheets integration** — live data refresh via `gspread`
 - [ ] **PDF export** — generate a one-page summary report with `WeasyPrint`
