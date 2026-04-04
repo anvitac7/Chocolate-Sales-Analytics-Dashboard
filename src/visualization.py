@@ -11,6 +11,7 @@ Advanced charts  (11-15): Statistical analysis, ML, forecasting
 
 from __future__ import annotations
 
+import streamlit as st
 import warnings
 import numpy as np
 import pandas as pd
@@ -47,6 +48,7 @@ def _axis_style() -> dict:
 # ─────────────────────────────────────────────────────────────────────────────
 #  1. Sales over time (area + MA)
 # ─────────────────────────────────────────────────────────────────────────────
+@st.cache_data
 def sales_over_time(df: pd.DataFrame, freq: str = "M") -> go.Figure:
     """Area line chart: aggregated revenue over time with 3-period moving average."""
     ts = (
@@ -63,7 +65,7 @@ def sales_over_time(df: pd.DataFrame, freq: str = "M") -> go.Figure:
         x=ts["date"], y=ts["revenue"],
         fill="tozeroy",
         fillcolor="rgba(108,52,131,0.18)",
-        line=dict(color="#9B59B6", width=2.5),
+        line=dict(color=CHART_COLORS[0], width=2.5),
         name="Revenue",
         hovertemplate="<b>%{x|%b %Y}</b><br>Revenue: $%{y:,.0f}<extra></extra>",
     ))
@@ -122,6 +124,7 @@ def cumulative_revenue(df: pd.DataFrame) -> go.Figure:
 # ─────────────────────────────────────────────────────────────────────────────
 #  3. Revenue by country (bar chart)
 # ─────────────────────────────────────────────────────────────────────────────
+@st.cache_data
 def revenue_by_country(df: pd.DataFrame) -> go.Figure:
     """Sorted vertical bar chart of total revenue per country."""
     grp = (
@@ -143,6 +146,15 @@ def revenue_by_country(df: pd.DataFrame) -> go.Figure:
         customdata=grp["orders"],
         hovertemplate="<b>%{x}</b><br>Revenue: $%{y:,.0f}<br>Orders: %{customdata:,}<extra></extra>",
     ))
+    top_country = grp.iloc[0]
+
+    fig.add_annotation(
+        x=top_country["country"],
+        y=top_country["revenue"],
+        text="🏆 Top Country",
+        showarrow=True,
+        arrowhead=2
+    )
     fig = _apply_layout(fig, "Revenue by Country")
     fig.update_xaxes(**_axis_style())
     fig.update_yaxes(**_axis_style(), title="Revenue (USD)", tickprefix="$", tickformat=",")
@@ -241,6 +253,7 @@ def revenue_per_box_chart(df: pd.DataFrame) -> go.Figure:
 # ─────────────────────────────────────────────────────────────────────────────
 #  7. Monthly trend YoY (grouped bar)
 # ─────────────────────────────────────────────────────────────────────────────
+@st.cache_data
 def monthly_trend(df: pd.DataFrame) -> go.Figure:
     """Grouped bar chart showing month-by-month revenue, colour-coded by year."""
     MONTH_ORDER = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -264,6 +277,14 @@ def monthly_trend(df: pd.DataFrame) -> go.Figure:
     fig.update_xaxes(**_axis_style(), title="Month", categoryorder="array",
                      categoryarray=MONTH_ORDER)
     fig.update_yaxes(**_axis_style(), title="Revenue (USD)", tickprefix="$", tickformat=",")
+    peak = grp.loc[grp["amount"].idxmax()]
+
+    fig.add_annotation(
+        x=peak["month_name"],
+        y=peak["amount"],
+        text="📈 Peak Month",
+        showarrow=True
+    )
     return fig
 
 
@@ -277,7 +298,7 @@ def boxes_distribution(df: pd.DataFrame) -> go.Figure:
     fig.add_trace(go.Histogram(
         x=vals, nbinsx=40,
         marker_color="rgba(108,52,131,0.65)",
-        marker_line=dict(color="#9B59B6", width=0.8),
+        marker_line=dict(color=CHART_COLORS[0], width=0.8),
         name="Frequency",
         hovertemplate="Boxes: %{x}<br>Count: %{y}<extra></extra>",
     ))
@@ -303,6 +324,7 @@ def boxes_distribution(df: pd.DataFrame) -> go.Figure:
 # ─────────────────────────────────────────────────────────────────────────────
 #  9. Country × Product heatmap
 # ─────────────────────────────────────────────────────────────────────────────
+@st.cache_data
 def heatmap_product_country(df: pd.DataFrame) -> go.Figure:
     """Heatmap of revenue: rows = countries, columns = top-12 products."""
     pivot = df.pivot_table(
@@ -483,7 +505,7 @@ def revenue_forecast_arima(
     fig.add_trace(go.Bar(
         x=ts_history.index, y=ts_history.values,
         marker_color="rgba(155,89,182,0.50)",
-        marker_line=dict(color="#9B59B6", width=0.7),
+        marker_line=dict(color=CHART_COLORS[0], width=0.7),
         name="Actual Revenue",
         hovertemplate="<b>%{x|%b %Y}</b><br>$%{y:,.0f}<extra></extra>",
     ))
@@ -602,3 +624,11 @@ def cluster_radar_chart(cluster_df: pd.DataFrame) -> go.Figure:
         ),
     )
     return fig
+
+def correlation_heatmap(df):
+    import plotly.express as px
+
+    corr = df[["amount", "boxes_shipped", "revenue_per_box"]].corr()
+
+    fig = px.imshow(corr, text_auto=True, color_continuous_scale="Purples")
+    return _apply_layout(fig, "Feature Correlation Heatmap")
