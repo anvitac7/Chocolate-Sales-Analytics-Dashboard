@@ -122,7 +122,25 @@ streamlit run app.py
 
 ## 📷 Dashboard Preview
 
+### 🏠 Main Dashboard
+![Main Dashboard](Images/Main.png)
 
+### 📈 Sales Trends & Forecasting
+![Revenue Trend](Images/Revenue_Trend.png)
+
+![Product Analysis](Images/Product_Analysis.png)
+
+
+### 🌍 Regional & Product Insights
+![Revenue Heatmap: Country × Product](Images/Heatmap.png)
+
+
+### 🧠 Advanced Analytics (Clustering)
+![Box Plots](Images/Box Plots.png)
+
+![ARIMA Forecasting](Images/Forecasting.png)
+
+![K-Means_Clustering](Images/K-Means_Clustering.png)
 
 ---
 
