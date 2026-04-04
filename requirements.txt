@@ -15,6 +15,4 @@ scikit-learn>=1.4.0    # K-Means clustering, Linear Regression, StandardScaler
 # ── Time Series ───────────────────────────
 statsmodels>=0.14.0    # Seasonal decomposition (STL / additive)
 
-# ── Optional (nice-to-have) ───────────────
-# openpyxl>=3.1.0      # Uncomment if you add Excel export
-# watchdog>=3.0.0      # Faster Streamlit file-watcher
+
