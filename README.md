@@ -1,71 +1,161 @@
 # 🍫 Chocolate Sales Analytics Dashboard
 
+## 🔗 Live Demo
+
+👉 https://chocolate-sales-analytics-dashboard-rvgbedcvw3dp3qxtan2jxt.streamlit.app/
+
+---
+
 ## 📌 Overview
 
-An interactive **Streamlit dashboard** built using chocolate sales data to analyze revenue trends, product performance, and country-wise insights.
+An end-to-end **interactive analytics dashboard** built using **Streamlit, Plotly, and Python** to analyze chocolate sales data.
+
+The dashboard transforms raw transactional data into **actionable business insights**, helping stakeholders:
+
+* Track revenue trends
+* Identify top-performing products & regions
+* Analyze sales efficiency
+* Forecast future revenue
+
+👉 Built with a focus on **real-world business decision-making**, not just visualization.
 
 ---
 
-## 🎯 Problem Statement
+## 🎯 Business Problem
 
-Businesses need a clear understanding of:
+Organizations need a clear understanding of:
 
-* Sales performance over time
-* Top-performing products
-* Revenue distribution across regions
+* 📈 How sales evolve over time
+* 🌍 Which regions drive the most revenue
+* 🏆 Which products perform best
+* 📊 How sales teams are performing
 
-This dashboard provides **data-driven insights** for decision-making.
+This dashboard solves these problems using **interactive analytics + machine learning**.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Features
 
-* 📊 Interactive filters (Country, Product)
-* 📈 Sales trend analysis
-* 🌍 Revenue by country
-* 🏆 Top products visualization
-* 📥 Download filtered dataset
-* 🧠 Auto-generated insights
+### 📊 Interactive Analytics
+
+* Dynamic filters (Country, Product, Time)
+* KPI cards (Revenue, Orders, Avg Value)
+* Drill-down exploration
+
+### 📈 Advanced Visualizations
+
+* Revenue trends with moving averages
+* Country-wise performance
+* Product-level insights
+* Heatmaps & distribution analysis
+* Salesperson performance (bubble chart)
+
+### 🧠 Machine Learning & Advanced Analytics
+
+* **ARIMA Forecasting** → Predict future revenue trends
+* **K-Means Clustering** → Segment salespersons based on performance
+* **Statistical Analysis** → Box plots for distribution insights
+
+### ⚡ Performance Optimized
+
+* Streamlit caching (`@st.cache_data`) for fast execution
+* Modular architecture (data → preprocessing → visualization)
+
+---
+
+## 🧠 Key Insights Generated
+
+* Identify **top revenue-generating countries**
+* Detect **best-selling products**
+* Analyze **seasonality and peak sales periods**
+* Evaluate **salesperson efficiency**
+* Forecast **future demand trends**
+
+👉 Dashboards are powerful because they surface insights for decision-making ([Streamlit][1])
 
 ---
 
 ## 🛠 Tech Stack
 
-* Python
-* Streamlit
-* Pandas
-* Plotly
+| Layer           | Tools          |
+| --------------- | -------------- |
+| Language        | Python         |
+| Frontend        | Streamlit      |
+| Data Processing | Pandas, NumPy  |
+| Visualization   | Plotly         |
+| ML Models       | ARIMA, K-Means |
 
 ---
 
-## 📷 Dashboard Preview
+## 🏗 Project Structure
 
-(Add screenshot here)
+```bash
+Chocolate-Sales-Analytics-Dashboard/
+│
+├── app.py
+├── data/
+├── src/
+│   ├── data_loader.py
+│   ├── preprocessing.py
+│   ├── visualization.py
+│   ├── utils.py
+│
+├── requirements.txt
+└── README.md
+```
+
+👉 Follows modular design best practices for scalability ([Mauricio Cárdenas][2])
 
 ---
 
-## ⚙️ How to Run
+## ⚙️ How to Run Locally
 
 ```bash
 git clone https://github.com/anvitac7/Chocolate-Sales-Analytics-Dashboard
 cd Chocolate-Sales-Analytics-Dashboard
+
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
 ---
 
-## 🌟 Future Improvements
+## 📷 Dashboard Preview
 
-* Add ML model for sales prediction
-* Deploy on Streamlit Cloud
-* Add advanced filters (date range)
-* Improve UI/UX
+
 
 ---
 
-## 💡 Key Insights
+## 💼 Business Impact
 
-* Identify top revenue-generating countries
-* Discover best-selling products
-* Analyze seasonal trends
+* 📊 Improve decision-making with real-time insights
+* 📦 Optimize product strategy using performance data
+* 🌍 Identify high-growth markets
+* 📉 Reduce risk using demand forecasting
+* 👥 Improve sales team performance via segmentation
+
+---
+
+## 🌟 Future Improvements
+
+* Add customer segmentation (RFM analysis)
+* Deploy ML model APIs
+* Add anomaly detection
+* Enhance UI/UX with animations
+
+---
+
+## 👩‍💻 Author
+
+**Anvita Choudhary**
+Department of AI&DS
+KJ Somaiya School of Engineering
+
+---
+
+## ⭐ If you like this project
+
+Give it a ⭐ on GitHub — it helps a lot!
+
+[1]: https://blog.streamlit.io/crafting-a-dashboard-app-in-python-using-streamlit/?utm_source=chatgpt.com "Building a dashboard in Python using Streamlit"
+[2]: https://mauriciojc.com/streamlit-dashboard-development-best-practices-checklist/?utm_source=chatgpt.com "Streamlit Dashboard Development Best Practices Checklist – Mauricio Cárdenas"
