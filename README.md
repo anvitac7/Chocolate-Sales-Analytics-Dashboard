@@ -1,15 +1,15 @@
-# 🍫 Chocolate Sales Intelligence Platform
+#  Chocolate Sales Intelligence Platform
 
-## 🚀 Live Application
+##  Live Application
 
-👉 https://chocolate-sales-analytics-dashboard-rvgbedcvw3dp3qxtan2jxt.streamlit.app/
+ https://chocolate-sales-analytics-dashboard-rvgbedcvw3dp3qxtan2jxt.streamlit.app/
 
 ---
 
-## 🧠 From Raw Data to Business Decisions
+##  From Raw Data to Business Decisions
 
 Most dashboards stop at visualization.
-This project goes further — it transforms raw chocolate sales data into a **decision-making system** powered by analytics and machine learning.
+This project goes further  it transforms raw chocolate sales data into a **decision-making system** powered by analytics and machine learning.
 
 It answers not just:
 
@@ -22,7 +22,7 @@ But also begins to uncover:
 
 ---
 
-## 🎯 Problem Statement
+##  Problem Statement
 
 Sales teams and business stakeholders often lack clear answers to:
 
@@ -36,22 +36,22 @@ Without these insights, decisions are reactive rather than strategic.
 
 ---
 
-## 💡 Solution
+##  Solution
 
 This project delivers an **interactive analytics platform** that combines:
 
-* 📊 Real-time exploratory data analysis
-* 📈 Time-series forecasting
-* 🧠 Sales performance segmentation
-* 📌 Actionable business insights
+*  Real-time exploratory data analysis
+*  Time-series forecasting
+*  Sales performance segmentation
+*  Actionable business insights
 
 All within a single, intuitive Streamlit interface.
 
 ---
 
-## ⚡ Key Capabilities
+##  Key Capabilities
 
-### 🔹 1. Interactive Business Dashboard
+###  1. Interactive Business Dashboard
 
 * Dynamic filtering by country, product, and time
 * Real-time KPI updates
@@ -59,7 +59,7 @@ All within a single, intuitive Streamlit interface.
 
 ---
 
-### 🔹 2. Executive KPI Layer
+###  2. Executive KPI Layer
 
 Quick snapshot of business health:
 
@@ -70,19 +70,19 @@ Quick snapshot of business health:
 
 ---
 
-### 🔹 3. Advanced Visual Analytics
+###  3. Advanced Visual Analytics
 
-* 📈 Revenue trends with moving averages
-* 🌍 Country-level performance comparison
-* 🏆 Product-wise contribution analysis
-* 🔥 Heatmaps (Country × Product)
-* 👥 Salesperson performance (bubble chart)
+*  Revenue trends with moving averages
+*  Country-level performance comparison
+*  Product-wise contribution analysis
+*  Heatmaps (Country x Product)
+*  Salesperson performance (bubble chart)
 
 ---
 
-## 🤖 Machine Learning Layer
+##  Machine Learning Layer
 
-### 📈 Time-Series Forecasting
+###  Time-Series Forecasting
 
 **Model Used:** ARIMA
 
@@ -98,7 +98,7 @@ Quick snapshot of business health:
 
 ---
 
-### 👥 Sales Segmentation
+###  Sales Segmentation
 
 **Model Used:** K-Means Clustering
 
@@ -112,7 +112,7 @@ Quick snapshot of business health:
 
 ---
 
-## 📊 Model Evaluation & Reliability
+##  Model Evaluation & Reliability
 
 To ensure trust in predictions:
 
@@ -128,17 +128,17 @@ To ensure trust in predictions:
 
 ---
 
-## 🔍 Key Insights Discovered
+##  Key Insights Discovered
 
-* 🌍 A small number of countries drive a disproportionate share of revenue
-* 🏆 Top-performing products contribute significantly to overall sales
-* 📈 Clear seasonal patterns exist in revenue trends
-* 👥 Sales performance varies widely across clusters
-* 🔮 Forecasting reveals predictable short-term demand patterns
+*  A small number of countries drive a disproportionate share of revenue
+*  Top-performing products contribute significantly to overall sales
+*  Clear seasonal patterns exist in revenue trends
+*  Sales performance varies widely across clusters
+*  Forecasting reveals predictable short-term demand patterns
 
 ---
 
-## 💼 Business Recommendations
+##  Business Recommendations
 
 Based on analysis:
 
@@ -149,22 +149,20 @@ Based on analysis:
 
 ---
 
-## 🏗️ System Design
+##  System Design
 
 ```bash
 Chocolate-Sales-Analytics-Dashboard/
-│
-├── app.py                  # Streamlit entry point
-├── data/                   # Raw dataset
-├── src/
-│   ├── data_loader.py      # Data ingestion
-│   ├── preprocessing.py    # Cleaning & feature engineering
-│   ├── visualization.py    # Plotly charts
-│   └── utils.py            # Helper functions
-│
-├── Images/                 # Dashboard previews
-├── requirements.txt
-└── README.md
+|-- app.py                  # Streamlit entry point
+|-- data/                   # Raw dataset
+|-- src/
+|   |-- data_loader.py      # Data ingestion
+|   |-- preprocessing.py    # Cleaning & feature engineering
+|   |-- visualization.py    # Plotly charts
+|   `-- utils.py            # Helper functions
+|-- Images/                 # Dashboard previews
+|-- requirements.txt
+`-- README.md
 ```
 
 ### Design Principles:
@@ -175,7 +173,7 @@ Chocolate-Sales-Analytics-Dashboard/
 
 ---
 
-## ⚙️ Local Setup
+##  Local Setup
 
 ```bash
 git clone https://github.com/anvitac7/Chocolate-Sales-Analytics-Dashboard
@@ -187,23 +185,23 @@ streamlit run app.py
 
 ---
 
-## 📷 Dashboard Preview
+##  Dashboard Preview
 
-### 🏠 Main Dashboard
+###  Main Dashboard
 
 ![Main Dashboard](Images/Main.png)
 
-### 📈 Sales Trends & Forecasting
+###  Sales Trends & Forecasting
 
 ![Revenue Trend](Images/Revenue_Trend.png)
 
 ![Product Analysis](Images/Product_Analysis.png)
 
-### 🌍 Regional Insights
+###  Regional Insights
 
 ![Heatmap](Images/Heatmap.png)
 
-### 🧠 Advanced Analytics
+###  Advanced Analytics
 
 ![Box Plots](Images/Box_Plots.png)
 
@@ -213,7 +211,7 @@ streamlit run app.py
 
 ---
 
-## ⚡ Performance Optimization
+##  Performance Optimization
 
 * Streamlit caching (`@st.cache_data`) for faster load times
 * Efficient preprocessing pipeline
@@ -221,7 +219,7 @@ streamlit run app.py
 
 ---
 
-## 📈 Scalability & Future Work
+##  Scalability & Future Work
 
 * Integrate real-time data pipelines (APIs)
 * Compare forecasting models (Prophet, LSTM)
@@ -230,7 +228,7 @@ streamlit run app.py
 
 ---
 
-## 👩‍💻 About the Author
+##  About the Author
 
 **Anvita Choudhary**
 AI & Data Science Student
@@ -238,6 +236,6 @@ KJ Somaiya School of Engineering
 
 ---
 
-## ⭐ If You Found This Useful
+##  If You Found This Useful
 
-Give it a ⭐ on GitHub — it helps the project reach more people!
+Give it a  on GitHub  it helps the project reach more people!

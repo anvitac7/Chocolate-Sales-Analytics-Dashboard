@@ -11,14 +11,10 @@ Advanced charts  (11-15): Statistical analysis, ML, forecasting
 
 from __future__ import annotations
 
-import streamlit as st
 import warnings
 import numpy as np
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import scipy.stats as stats
 
 from src.utils import CHART_COLORS, PLOTLY_LAYOUT, fmt_currency
 
@@ -37,9 +33,12 @@ def _apply_layout(fig: go.Figure, title: str = "", **kwargs) -> go.Figure:
 
 def _axis_style() -> dict:
     """Return common axis styling dict."""
+    from src.utils import _DARK
+    grid = "rgba(255,255,255,0.06)" if _DARK else "rgba(26,10,46,0.14)"
+    line = "rgba(255,255,255,0.12)" if _DARK else "rgba(26,10,46,0.32)"
     return dict(
-        gridcolor="rgba(255,255,255,0.06)",
-        linecolor="rgba(255,255,255,0.12)",
+        gridcolor=grid,
+        linecolor=line,
         tickfont=dict(size=11),
         title_font=dict(size=12),
     )
@@ -48,7 +47,6 @@ def _axis_style() -> dict:
 # ─────────────────────────────────────────────────────────────────────────────
 #  1. Sales over time (area + MA)
 # ─────────────────────────────────────────────────────────────────────────────
-@st.cache_data
 def sales_over_time(df: pd.DataFrame, freq: str = "M") -> go.Figure:
     """Area line chart: aggregated revenue over time with 3-period moving average."""
     ts = (
@@ -124,7 +122,6 @@ def cumulative_revenue(df: pd.DataFrame) -> go.Figure:
 # ─────────────────────────────────────────────────────────────────────────────
 #  3. Revenue by country (bar chart)
 # ─────────────────────────────────────────────────────────────────────────────
-@st.cache_data
 def revenue_by_country(df: pd.DataFrame) -> go.Figure:
     """Sorted vertical bar chart of total revenue per country."""
     grp = (
@@ -151,7 +148,7 @@ def revenue_by_country(df: pd.DataFrame) -> go.Figure:
     fig.add_annotation(
         x=top_country["country"],
         y=top_country["revenue"],
-        text="🏆 Top Country",
+        text="Top Country",
         showarrow=True,
         arrowhead=2
     )
@@ -253,7 +250,6 @@ def revenue_per_box_chart(df: pd.DataFrame) -> go.Figure:
 # ─────────────────────────────────────────────────────────────────────────────
 #  7. Monthly trend YoY (grouped bar)
 # ─────────────────────────────────────────────────────────────────────────────
-@st.cache_data
 def monthly_trend(df: pd.DataFrame) -> go.Figure:
     """Grouped bar chart showing month-by-month revenue, colour-coded by year."""
     MONTH_ORDER = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -282,7 +278,7 @@ def monthly_trend(df: pd.DataFrame) -> go.Figure:
     fig.add_annotation(
         x=peak["month_name"],
         y=peak["amount"],
-        text="📈 Peak Month",
+        text="Peak Month",
         showarrow=True
     )
     return fig
@@ -324,7 +320,6 @@ def boxes_distribution(df: pd.DataFrame) -> go.Figure:
 # ─────────────────────────────────────────────────────────────────────────────
 #  9. Country × Product heatmap
 # ─────────────────────────────────────────────────────────────────────────────
-@st.cache_data
 def heatmap_product_country(df: pd.DataFrame) -> go.Figure:
     """Heatmap of revenue: rows = countries, columns = top-12 products."""
     pivot = df.pivot_table(
@@ -461,10 +456,6 @@ def boxplot_revenue_analysis(df: pd.DataFrame, group_by: str = "country") -> go.
     fig.update_yaxes(**_axis_style(), title="Order Revenue (USD)", tickprefix="$", tickformat=",")
     return fig
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-#  12. Linear Regression Forecast
-# ─────────────────────────────────────────────────────────────────────────────
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  12. ARIMA Forecast Chart
@@ -624,11 +615,3 @@ def cluster_radar_chart(cluster_df: pd.DataFrame) -> go.Figure:
         ),
     )
     return fig
-
-def correlation_heatmap(df):
-    import plotly.express as px
-
-    corr = df[["amount", "boxes_shipped", "revenue_per_box"]].corr()
-
-    fig = px.imshow(corr, text_auto=True, color_continuous_scale="Purples")
-    return _apply_layout(fig, "Feature Correlation Heatmap")

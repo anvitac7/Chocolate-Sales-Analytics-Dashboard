@@ -7,12 +7,11 @@ numpy>=1.26.0
 plotly>=5.20.0
 
 # ── Data processing / stats ───────────────
-scipy>=1.12.0          # KDE, Shapiro-Wilk, distribution fitting
+scipy>=1.12.0          # Savitzky-Golay smoothing for distribution curve
 
 # ── Machine Learning ──────────────────────
-scikit-learn>=1.4.0    # K-Means clustering, Linear Regression, StandardScaler
+scikit-learn>=1.4.0    # K-Means clustering, StandardScaler
 
 # ── Time Series ───────────────────────────
-statsmodels>=0.14.0    # Seasonal decomposition (STL / additive)
-
+statsmodels>=0.14.0    # ARIMA forecasting
 
