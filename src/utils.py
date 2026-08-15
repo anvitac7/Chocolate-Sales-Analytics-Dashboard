@@ -5,8 +5,7 @@ Reusable utility functions shared across the dashboard:
   - Number formatting
   - Auto-generated business insights
   - Download helper
-  - Colour palette
-  - ML helpers: K-Means clustering, Linear Regression forecast, TS decomposition
+  - ML helpers: K-Means clustering and ARIMA forecast
 """
 
 from __future__ import annotations
@@ -14,23 +13,9 @@ from __future__ import annotations
 import warnings
 import numpy as np
 import pandas as pd
-import streamlit as st
-import scipy.stats as scipy_stats
 
 warnings.filterwarnings("ignore")
 
-
-# ─── Colour Palette ───────────────────────────────────────────────────────────
-PALETTE = {
-    "primary":    "#6C3483",
-    "secondary":  "#C0392B",
-    "accent":     "#F39C12",
-    "success":    "#1E8449",
-    "danger":     "#C0392B",
-    "muted":      "#95A5A6",
-    "bg_dark":    "#1C1C2E",
-    "bg_card":    "#2D2D44",
-}
 
 CHART_COLORS = [
     "#9B59B6", "#C0392B", "#F39C12", "#2ECC71",
@@ -58,7 +43,10 @@ def configure_theme(dark: bool) -> None:
     _DARK = dark
     font_color = "#F0E6FF" if dark else "#1A0A2E"
     hover_bg   = "#2D2D44" if dark else "#FFFFFF"
+    paper_bg   = "rgba(0,0,0,0)" if dark else "#FFFFFF"
     PLOTLY_LAYOUT["font"]       = dict(family="Inter, sans-serif", color=font_color)
+    PLOTLY_LAYOUT["paper_bgcolor"] = paper_bg
+    PLOTLY_LAYOUT["plot_bgcolor"]  = paper_bg
     PLOTLY_LAYOUT["hoverlabel"] = dict(bgcolor=hover_bg, font_size=12,
                                        font_family="Inter", font_color=font_color)
     PLOTLY_LAYOUT["legend"]     = dict(bgcolor="rgba(0,0,0,0)", font_size=11,
@@ -82,22 +70,18 @@ def fmt_percent(value: float, decimals: int = 1) -> str:
     return f"{value * 100:.{decimals}f}%"
 
 
-def delta_color(current: float, previous: float) -> str:
-    return "normal" if current >= previous else "inverse"
-
-
 # ─── Business Insights Generator ─────────────────────────────────────────────
 def generate_insights(df: pd.DataFrame) -> list[dict]:
     """Auto-generate business insight cards from the filtered data."""
     insights = []
     if df.empty:
-        return [{"icon": "⚠️", "title": "No Data",
+        return [{"title": "No Data",
                  "body": "Adjust your filters to see insights."}]
 
     top_sp     = df.groupby("salesperson")["amount"].sum().idxmax()
     top_sp_rev = df.groupby("salesperson")["amount"].sum().max()
     insights.append({
-        "icon": "🏆", "title": "Star Performer",
+        "title": "Star Performer",
         "body": (
             f"**{top_sp}** leads with **{fmt_currency(top_sp_rev)}** in revenue. "
             "Consider highlighting their techniques in team training."
@@ -107,7 +91,7 @@ def generate_insights(df: pd.DataFrame) -> list[dict]:
     top_country   = df.groupby("country")["amount"].sum().idxmax()
     country_share = df.groupby("country")["amount"].sum().max() / df["amount"].sum()
     insights.append({
-        "icon": "🌍", "title": "Dominant Market",
+        "title": "Dominant Market",
         "body": (
             f"**{top_country}** contributes **{fmt_percent(country_share)}** of total revenue. "
             "Expanding inventory depth here could yield outsized returns."
@@ -117,7 +101,7 @@ def generate_insights(df: pd.DataFrame) -> list[dict]:
     top_prod     = df.groupby("product")["amount"].sum().idxmax()
     top_prod_rev = df.groupby("product")["amount"].sum().max()
     insights.append({
-        "icon": "🍫", "title": "Best-Selling Product",
+        "title": "Best-Selling Product",
         "body": (
             f"**{top_prod}** generates **{fmt_currency(top_prod_rev)}**. "
             "Bundling this with lower performers may lift average order value."
@@ -131,7 +115,7 @@ def generate_insights(df: pd.DataFrame) -> list[dict]:
                        5: "May", 6: "Jun", 7: "Jul", 8: "Aug",
                        9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"}
         insights.append({
-            "icon": "📈", "title": "Peak Season",
+            "title": "Peak Season",
             "body": (
                 f"**{month_names.get(peak_month, peak_month)}** is historically the strongest month. "
                 "Pre-position stock and run promotions heading into this period."
@@ -141,7 +125,7 @@ def generate_insights(df: pd.DataFrame) -> list[dict]:
     best_rpb_prod = df.groupby("product")["revenue_per_box"].mean().idxmax()
     best_rpb      = df.groupby("product")["revenue_per_box"].mean().max()
     insights.append({
-        "icon": "💡", "title": "Most Efficient Product",
+        "title": "Most Efficient Product",
         "body": (
             f"**{best_rpb_prod}** earns **{fmt_currency(best_rpb, 2)} per box** — "
             "the highest revenue efficiency. Prioritise in constrained-logistics markets."
@@ -153,7 +137,7 @@ def generate_insights(df: pd.DataFrame) -> list[dict]:
         df[df["high_value_order"]]["amount"].sum() / df["amount"].sum()
     )
     insights.append({
-        "icon": "💎", "title": "High-Value Order Concentration",
+        "title": "High-Value Order Concentration",
         "body": (
             f"Only **{fmt_percent(hv_pct)}** of orders are high-value, yet they represent "
             f"**{fmt_percent(hv_rev_share)}** of total revenue — a classic Pareto pattern."
@@ -311,52 +295,3 @@ def run_arima_forecast(
     })
 
     return forecast_df, best_order, best_aic, best_model.fittedvalues, ts
-
-
-# ─── Statistical Summary ─────────────────────────────────────────────────────
-def compute_revenue_stats(df: pd.DataFrame) -> dict:
-    """
-    Compute detailed descriptive statistics and distribution fit metrics.
-
-    Returns a dict with:
-      mean, median, std, skewness, kurtosis, iqr,
-      normality_p (Shapiro-Wilk p-value),
-      lognormal_fit (True if log-normal fits better than normal)
-    """
-    vals = df["amount"].dropna()
-    if len(vals) < 5:
-        return {}
-
-    mean     = float(vals.mean())
-    median   = float(vals.median())
-    std      = float(vals.std())
-    skewness = float(scipy_stats.skew(vals))
-    kurt     = float(scipy_stats.kurtosis(vals))
-    p25, p75 = np.percentile(vals, [25, 75])
-    iqr      = float(p75 - p25)
-
-    # Shapiro-Wilk normality test (subsample if large)
-    sample = vals.sample(min(500, len(vals)), random_state=42)
-    try:
-        _, norm_p = scipy_stats.shapiro(sample)
-    except Exception:
-        norm_p = None
-
-    # Compare AIC: normal vs log-normal
-    try:
-        mu_n, sigma_n = scipy_stats.norm.fit(vals)
-        ll_norm       = scipy_stats.norm.logpdf(vals, mu_n, sigma_n).sum()
-        s, loc, scale = scipy_stats.lognorm.fit(vals, floc=0)
-        ll_logn       = scipy_stats.lognorm.logpdf(vals, s, loc=loc, scale=scale).sum()
-        lognormal_better = ll_logn > ll_norm
-    except Exception:
-        lognormal_better = None
-
-    return dict(
-        mean=mean, median=median, std=std,
-        skewness=skewness, kurtosis=kurt, iqr=iqr,
-        p25=p25, p75=p75,
-        normality_p=norm_p,
-        lognormal_fit=lognormal_better,
-        n=len(vals),
-    )
